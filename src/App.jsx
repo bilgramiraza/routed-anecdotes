@@ -7,13 +7,16 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { useField } from './hooks';
+import { notify } from './reducers/notificationReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Notification = ({ message }) => {
-  if (!message) return null;
+const Notification = () => {
+  const notification = useSelector(state => state.notification);
+  if (!notification.message) return null;
 
   return (
     <div>
-      <p>{message}</p>
+      <p>{notification.message}</p>
     </div>
   );
 };
@@ -123,6 +126,7 @@ const CreateNew = (props) => {
 
 const App = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -141,18 +145,12 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
-
-  const notify = (message) => {
-    setNotification(message);
-    setTimeout(() => setNotification(''), 5000);
-  };
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
     navigate('/');
-    notify(`Anecdote Created: "${anecdote.content}"`);
+    dispatch(notify(`Anecdote Created: "${anecdote.content}"`, 5));
   }
 
   const anecdoteById = (id) =>
@@ -178,7 +176,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
-      <Notification message={notification} />
+      <Notification />
       <Routes>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
