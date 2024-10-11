@@ -21,4 +21,12 @@ const notifySlice = createSlice({
 
 export const { setNotify, clearNotify } = notifySlice.actions;
 
+export const notify = (message, time) => {
+	return async dispatch => {
+		dispatch(setNotify({ message }));
+
+		setTimeout(() => dispatch(clearNotify()), time * 1000);
+	};
+};
+
 export default notifySlice.reducer;
