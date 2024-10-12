@@ -3,8 +3,13 @@ import {
   BrowserRouter,
 } from 'react-router-dom';
 import App from './App'
+import { NotificationContextProvider } from './reducers/NotificationContext';
 
 ReactDOM.createRoot(document.getElementById('root'))
-  .render(<BrowserRouter>
-    <App />
-  </BrowserRouter>);
+  .render(
+    <BrowserRouter>
+      <NotificationContextProvider>
+        <App />
+      </NotificationContextProvider>
+    </BrowserRouter>
+  );
