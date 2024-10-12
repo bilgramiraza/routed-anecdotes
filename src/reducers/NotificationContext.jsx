@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 const initialState = {
   message: '',
@@ -26,6 +26,26 @@ export const NotificationContextProvider = props => {
       {props.children}
     </NotificationContext.Provider>
   );
+};
+
+export const useNotificationValue = () => {
+  const notifAndDispatch = useContext(NotificationContext);
+  return notifAndDispatch[0];
+}
+
+export const useNotificationDispatch = () => {
+  const notifAndDispatch = useContext(NotificationContext);
+  return notifAndDispatch[1];
+}
+
+export const notifyWithTimeout = (dispatch, message, timeout = 5000) => {
+  dispatch({
+    type: 'notify',
+    payload: {
+      message,
+    },
+  });
+  setTimeout(() => dispatch({ type: 'clear' }), timeout);
 };
 
 export default NotificationContext;
